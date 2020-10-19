@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Create static page</title>
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+		integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+	<!--FROALA START -->
+	<!-- <script src="./../node_modules/jquery/dist/jquery.min.js"></script> -->
+	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+
+	<!---here-->
+	<link href="./node_modules/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.3.0/mode/xml/xml.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.3.0/mode/xml/xml.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+	<script src="https://editor-latest.s3.amazonaws.com/v3/js/froala_editor.pkgd.min.js"></script>
+	<link href="https://editor-latest.s3.amazonaws.com/v3/css/froala_editor.pkgd.min.css" rel="stylesheet"
+		type="text/css" />
+	<script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+
+
+
+
+
+	<!-- FROALA END -->
+</head>
+
+<body>
+	<div class="create-page-form">
+		<h3>Create static page</h3>
+		<form action="create" method="POST">
+			<input type="text" name="title" placeholder="title" required>
+			<input type="textarea" name="meta_data" placeholder="Meta data" required>
+
+			<!-- <textarea id="edit" name="content"></textarea> -->
+			<textarea  id="froala-editor" name="body"></textarea >
+
+			<input type="submit">
+		</form>
+	</div>
+
+	<a href="/admin">back</a>
+
+
+	<script>
+		$(function () {
+			new FroalaEditor('textarea#froala-editor', {
+				iconsTemplate: 'font_awesome_5',
+				toolbarButtons: ['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|', 'fontFamily', 'fontSize', 'color', 'inlineStyle', 'paragraphStyle', '|', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'quote'],
+				imageEditButtons: ['imageDisplay', 'imageAlign', 'imageInfo', 'imageRemove']
+			})
+		});
+	</script>
+
+</body>
+
+</html>
