@@ -1,18 +1,8 @@
-var mysql = require('mysql');
 var express = require('express');
 var session = require('express-session');
 var bodyParser = require('body-parser');
 var path = require('path');
 var fs = require('fs');
-var hbs = require('hbs');
-//var upload_image = require('./image_upload.js');
-
-var connection = mysql.createConnection({ //todo: write user controller and remove
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'nodecmc'
-});
 
 var app = express();
 app.use(session({
@@ -25,13 +15,18 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 
-///////////////////////////////////////////
+/**
+ * db and controllers
+ */
 const db = require("./models");
 db.sequelize.sync();
 
 const pages = require("./controllers/page.controller.js");
-///////////////////////////////////////////
+const users = require("./controllers/user.controller.js");
 
+/**
+ * routes
+ */
 app.get('/', function (request, response) {
     response.sendFile(path.join(__dirname + '/routes/index.html'));
 });
@@ -40,42 +35,16 @@ app.get('/login', function (request, response) {
     response.sendFile(path.join(__dirname + '/routes/login.html'));
 });
 
-app.get('/admin/pages/sync/:id', pages.sync);
-
-app.post('/auth', function (request, response) {
-    var username = request.body.username;
-    var password = request.body.password;
-    if (username && password) {
-        connection.query('SELECT * FROM accounts WHERE username = ? AND password = ?', [username, password], function (error, results, fields) {
-            if (results.length > 0) {
-                request.session.loggedin = true;
-                request.session.username = username;
-                response.redirect('/admin');
-            } else {
-                response.send('Incorrect Username and/or Password!');
-            }
-            response.end();
-        });
-    } else {
-        response.send('Please enter Username and Password!');
-        response.end();
-    }
-});
+app.post('/auth', users.auth);
+app.get('/logout', users.logout);
 
 app.get('/admin', pages.findAll);
 app.get('/admin/pages/create', pages.create);
 app.post('/admin/pages/create', pages.create);
+app.get('/admin/pages/sync/:id', pages.sync);
 
-app.get('/logout', function (request, response) {
-    if (request.session.loggedin) {
-        request.session.loggedin = false;
-        request.session.username = null;
-        response.redirect('/');
 
-    }
-});
-
-// post image handler.
+// TODO: post image handler.
 app.post('/image_upload', function (req, res) {
 
     upload_image(req, function (err, data) {
@@ -86,7 +55,6 @@ app.post('/image_upload', function (req, res) {
         res.send(data);
     });
 });
-
 
 // Create folder for uploading files.
 var filesDir = path.join(path.dirname(require.main.filename), 'uploads');

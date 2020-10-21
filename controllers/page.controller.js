@@ -66,7 +66,7 @@ exports.findAll = (req, res) => {
 };
 
 exports.sync = (req, res) => {
-    Page.findOne({ id: req.params.id }).then(page => {
+    Page.findOne({ where: { id: req.params.id } }).then(page => {
         const fileName = page.title + '.html';
 
         fileContent = generator.generatePage(page);
