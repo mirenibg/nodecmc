@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Admin dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+</head>
+
+<body>
+    <main role="main">
+        <div class="jumbotron">
+            <div class="container">
+                <a href="/logout">
+                    << logout</a>
+                        <h4>admin dashboard</h4>
+            </div>
+            <a href="/admin/pages/create">create page</a> |
+            <a href="/admin/pages/create">create menu item</a>
+        </div>
+        <div class="container">
+
+
+
+            <!-- <h2>Pages</h2>
+            <button class="btn btn-success" data-toggle="modal" data-target="#myModalAdd">Add New</button> -->
+            <table class="table table-striped" id="mytable">
+                <thead>
+                    <tr>
+                        <th>id</th>
+                        <th>title</th>
+                        <th>slug</th>
+                        <th>action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each results}}
+                    <tr>
+                        <td>{{ id }}</td>
+                        <td>{{ title }}</td>
+                        <td>{{ product_price }}</td>
+                        <td>
+                            <a href="/admin/pages/sync/{{id}}" class="btn btn-sm btn-info edit">sync</a>
+                            <a href="javascript:void(0);" class="btn btn-sm btn-danger delete"
+                                data-id="{{ product_id }}">delete</a>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+
+
+        </div>
+    </main>
+
+</body>
+
+</html>

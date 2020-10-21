@@ -4,9 +4,10 @@ var session = require('express-session');
 var bodyParser = require('body-parser');
 var path = require('path');
 var fs = require('fs');
-var upload_image = require('./image_upload.js');
+var hbs = require('hbs');
+//var upload_image = require('./image_upload.js');
 
-var connection = mysql.createConnection({
+var connection = mysql.createConnection({ //todo: write user controller and remove
     host: 'localhost',
     user: 'root',
     password: '',
@@ -19,8 +20,17 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 }));
+app.set('view engine', 'hbs');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+
+///////////////////////////////////////////
+const db = require("./models");
+db.sequelize.sync();
+
+const pages = require("./controllers/page.controller.js");
+///////////////////////////////////////////
 
 app.get('/', function (request, response) {
     response.sendFile(path.join(__dirname + '/routes/index.html'));
@@ -29,6 +39,8 @@ app.get('/', function (request, response) {
 app.get('/login', function (request, response) {
     response.sendFile(path.join(__dirname + '/routes/login.html'));
 });
+
+app.get('/admin/pages/sync/:id', pages.sync);
 
 app.post('/auth', function (request, response) {
     var username = request.body.username;
@@ -50,41 +62,9 @@ app.post('/auth', function (request, response) {
     }
 });
 
-app.get('/admin', function (request, response) {
-    if (request.session.loggedin) {
-        // response.redirect('/admin');
-        response.sendFile(path.join(__dirname + '/routes/admin.html'));
-
-    } else {
-        response.send('Please login to view this page!');
-        response.end();
-    }
-});
-
-app.get('/admin/pages/create', function (request, response) {
-    if (request.session.loggedin) {
-        // response.redirect('/admin');
-        response.sendFile(path.join(__dirname + '/routes/create-page.html'));
-
-    } else {
-        response.send('Please login to view this page!');
-        response.end();
-    }
-});
-
-app.post('/admin/pages/create', function (request, response) {
-    if (request.session.loggedin) {
-        var title = request.body.title;
-        var body = request.body.body;
-
-        console.log(title);
-        console.log(body);
-
-    } else {
-        response.send('Please login to view this page!');
-        response.end();
-    }
-});
+app.get('/admin', pages.findAll);
+app.get('/admin/pages/create', pages.create);
+app.post('/admin/pages/create', pages.create);
 
 app.get('/logout', function (request, response) {
     if (request.session.loggedin) {
